@@ -25,5 +25,7 @@ void subs(IGRAC*, IGRAC*);
 void subs2(IGRAC*, IGRAC*);
 void selectionSortBrRegUzl(IGRAC*);
 void selectionSortBrRegSil(IGRAC*);
+void brisanjeIgr(IGRAC*);
+void brisanjeBaze(IGRAC*);
 
 #endif //FUNCTIONS_H

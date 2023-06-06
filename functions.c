@@ -18,9 +18,11 @@ int izbornik() {
 	printf("' 3 ' Ispis igraca\n");
 	printf("' 4 ' Trazilica igraca\n");
 	printf("' 5 ' Sortiraj igrace po registraciji\n");
+	printf("' 6 ' Brisanje igraca\n");
+	printf("' 7 ' Izlaz iz programa\n");
 
 
-	scanf("%d", &opcija);									
+	scanf("%d", &opcija);
 	system("cls");
 
 	switch (opcija) {
@@ -153,7 +155,7 @@ void dodavanjeIgraca() {
 	printf("Unesite broj registracije igraca: ");
 	scanf("%d", &igraci.brreg);
 	getchar();
-	fseek(fp, sizeof(IGRAC) * brojIgraca, SEEK_CUR);			//17
+	fseek(fp, sizeof(IGRAC) * brojIgraca, SEEK_CUR);			
 	fwrite(&igraci, sizeof(IGRAC), 1, fp);
 	rewind(fp);
 	brojIgraca++;
@@ -331,4 +333,43 @@ void selectionSortBrRegSil(IGRAC* polje) {
 		printf("\nID: %d Ime:%s  Prezime:%s  Pozicija:%s  Broj registracije: %d\n", (polje + i)->id, (polje + i)->ime, (polje + i)->prezime, (polje + i)->pozicija, (polje + i)->brreg);
 	}
 	printf("\n");
+}
+
+void brisanjeIgr(IGRAC* polje) {
+	FILE* fp = NULL;
+	fp = fopen("igraci.bin", "wb");				//16
+	if (fp == NULL) {
+		perror("Brisanje igraca");
+	}
+	rewind(fp);
+	fseek(fp, sizeof(int), SEEK_CUR);			//17
+
+	int br = 0, reqIgr;
+
+	printf("Unesite broj registracije igraca kojeg zelite obrisati:");
+	scanf("%d", &reqIgr);
+
+	for (i = 0; i < brojIgraca; i++) {
+		if (reqIgr != (polje + i)->id) {
+			fwrite((polje + i), sizeof(IGRAC), 1, fp);
+			br++;
+		}
+	}
+	rewind(fp);
+	fwrite(&br, sizeof(int), 1, fp);
+	fclose(fp);
+}
+
+void brisanjeBaze(IGRAC* polje) {
+	printf("Zelite li pri izlasku programa izbrisati datoteku ili zadrzati?\n");
+	printf("Ako zelite izbrisati datoteku napisite obrisi, ako ne zelite napisite zadrzi\n");
+
+	char uvjet[7] = { '\0' };
+	scanf("%6s", uvjet);
+	if (!strcmp("obrisi", uvjet)) {
+		remove("igraci.bin") == 0 ? printf("Izbrisali ste datoteku igraci.bin.\n") : printf("Datoteka neuspjesno izbrisani ili ona ne postoji.\n");				//18
+		printf("\nIzlaz iz programa.\n");
+		free(polje);							//14
+	}
+	else printf("\nZadrzali ste datoteku.\nIzlaz iz programa\n");
 }
