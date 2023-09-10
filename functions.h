@@ -1,19 +1,19 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-typedef struct igrac {									//3
+typedef struct igrac {										//2,3
 	int id;
 	char ime[25];
 	char prezime[30];
 	char pozicija[10];
 	int brreg;
-}IGRAC;													//2
+}IGRAC;
 
 int izbornik();
 int izbornikSrch();
 int izbornikSrt();
 void kreiranjeDat();
-void dodavanjeIgraca();									//6
+void dodavanjeIgraca();
 void azuriranje();
 void* ucitavanjeIgraca();
 void ispisivanje(IGRAC*);
