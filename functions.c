@@ -358,7 +358,7 @@ void brisanjeIgr(IGRAC* polje) {
 
 	int br = 0, reqIgr;
 
-	printf("Unesite broj registracije igraca kojeg zelite obrisati:");
+	printf("Unesite ID igraca kojeg zelite obrisati:");
 	scanf("%d", &reqIgr);
 
 	for (i = 0; i < brojIgraca; i++) {
