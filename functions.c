@@ -53,12 +53,24 @@ int izbornik() {
 		while (opcija != 89)
 			opcija = izbornikSrt();
 		break;
-
+	case 6:
+		if (polje == NULL)
+			printf("Baza podataka prazna.");
+		else
+			brisanjeIgr(polje);
+		break;
+	case 7:
+		brisanjeBaze(polje);
+		return 99;
+		break;
 	default:
 		printf("\nOdabrali ste pogresan broj!\nMolim probajte ponovno.\n");
 	}
 	return opcija;
+
 }
+
+
 
 izbornikSrch() {												//20
 	int opcija = 0;												//9
@@ -155,7 +167,7 @@ void dodavanjeIgraca() {
 	printf("Unesite broj registracije igraca: ");
 	scanf("%d", &igraci.brreg);
 	getchar();
-	fseek(fp, sizeof(IGRAC) * brojIgraca, SEEK_CUR);			
+	fseek(fp, sizeof(IGRAC) * brojIgraca, SEEK_CUR);
 	fwrite(&igraci, sizeof(IGRAC), 1, fp);
 	rewind(fp);
 	brojIgraca++;
