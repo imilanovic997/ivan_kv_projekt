@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -178,48 +178,68 @@ void dodavanjeIgraca() {
 void azuriranje() {
 	FILE* fp = NULL;
 	int reload;
+
 	fp = fopen("igraci.bin", "rb+");
-	if (fp == NULL)
+	if (fp == NULL) {
 		printf("Niste unijeli niti jednog igraca.\n");
-	else {
-		printf("Unesi broj igraca kojeg zelite ispraviti:\n");
-		scanf("%d", &reload);
-		fseek(fp, sizeof(int) + (sizeof(IGRAC) * (reload - 1)), SEEK_SET);
-		IGRAC ispravljenIgrac;
-		ispravljenIgrac.id = reload;
-		getchar();
-		printf("Unesite ispravljeno ime igraca: ");
-		scanf("%24[^\n]", ispravljenIgrac.ime);
-		getchar();
-		printf("Unesite ispravljeno prezime igraca: ");
-		scanf("%29[^\n]", ispravljenIgrac.prezime);
-		getchar();
-		printf("Unesite ispravljenu poziciju igraca: ");
-		scanf("%9[^\n]", ispravljenIgrac.pozicija);
-		getchar();
-		printf("Unesite ispravljen broj registracije igraca: ");
-		scanf("%d", &ispravljenIgrac.brreg);
-		getchar();
-		fwrite(&ispravljenIgrac, sizeof(IGRAC), 1, fp);
-		rewind(fp);
-		fwrite(&brojIgraca, sizeof(int), 1, fp);
-		fclose(fp);
+		return; 
 	}
+
+	printf("Unesite ID igraca kojeg zelite ispraviti:\n");
+	scanf("%d", &reload);
+
+	
+	if (reload <= 0 || reload > brojIgraca) {
+		printf("Neispravan ID igraca.\n");
+		fclose(fp);
+		return; 
+	}
+
+	fseek(fp, sizeof(int) + sizeof(IGRAC) * (reload - 1), SEEK_SET);
+	IGRAC ispravljenIgrac;
+
+	ispravljenIgrac.id = reload;
+	getchar(); 
+
+	printf("Unesite ispravljeno ime igraca: ");
+	scanf("%24[^\n]", ispravljenIgrac.ime);
+	getchar(); 
+
+	printf("Unesite ispravljeno prezime igraca: ");
+	scanf("%29[^\n]", ispravljenIgrac.prezime);
+	getchar(); 
+
+	printf("Unesite ispravljenu poziciju igraca: ");
+	scanf("%9[^\n]", ispravljenIgrac.pozicija);
+	getchar(); 
+
+	printf("Unesite ispravljen broj registracije igraca: ");
+	scanf("%d", &ispravljenIgrac.brreg);
+	getchar(); 
+
+	fwrite(&ispravljenIgrac, sizeof(IGRAC), 1, fp);
+	rewind(fp);
+	fwrite(&brojIgraca, sizeof(int), 1, fp);
+	fclose(fp);
 }
 
-void* ucitavanjeIgraca() {											//10
+
+void* ucitavanjeIgraca() {															//10
 	FILE* fp = fopen("igraci.bin", "rb");
 	if (fp == NULL) {
 		printf("Niste unijeli niti jednog igraca.\n");
 		return NULL;
 	}
+
 	fread(&brojIgraca, sizeof(int), 1, fp);
-	IGRAC* polje = NULL;
-	polje = (IGRAC*)calloc(brojIgraca, sizeof(IGRAC));				//13
+	IGRAC* polje = (IGRAC*)calloc(brojIgraca, sizeof(IGRAC));						//13
+
 	if (polje == NULL) {
 		perror("Zauzimanje memorije");
+		fclose(fp); 
 		return NULL;
 	}
+
 	fread(polje, sizeof(IGRAC), brojIgraca, fp);
 	fclose(fp);
 	return polje;
